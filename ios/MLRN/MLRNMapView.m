@@ -200,6 +200,75 @@ static double const M2PI = M_PI * 2;
   }];
 }
 
+- (void)setLayersVisibility:(BOOL)visible
+                  layerIds:(NSArray<NSString *> *)layerIds {
+  __weak typeof(self) weakSelf = self;
+  [self getStyle:^(MLNStyle *style) {
+    __strong typeof(self) strongSelf = weakSelf;
+    for (NSString *layerId in layerIds) {
+      [strongSelf waitForLayerWithID:layerId then:^(MLNStyleLayer *layer) {
+        layer.visible = visible;
+      }];
+    }
+  }];
+}
+
+- (void)setLayoutProperty:(NSString *)layerId
+                 property:(NSString *)property
+                    value:(id)value {
+  __weak typeof(self) weakSelf = self;
+  [self waitForLayerWithID:layerId then:^(MLNStyleLayer *layer) {
+    __strong typeof(self) strongSelf = weakSelf;
+    [strongSelf applyLayoutProperty:property value:value toLayer:layer];
+  }];
+}
+
+- (void)applyLayoutProperty:(NSString *)property
+                      value:(id)value
+                    toLayer:(MLNStyleLayer *)layer {
+  if ([property isEqualToString:@"visibility"]) {
+    layer.visible = [value boolValue];
+  } else if ([layer isKindOfClass:[MLNLineStyleLayer class]]) {
+    MLNLineStyleLayer *lineLayer = (MLNLineStyleLayer *)layer;
+    if ([property isEqualToString:@"line-cap"]) {
+      lineLayer.lineCap = [MLNStyleValue valueWithRawValue:value];
+    } else if ([property isEqualToString:@"line-join"]) {
+      lineLayer.lineJoin = [MLNStyleValue valueWithRawValue:value];
+    }
+  } else if ([layer isKindOfClass:[MLNSymbolStyleLayer class]]) {
+    MLNSymbolStyleLayer *symbolLayer = (MLNSymbolStyleLayer *)layer;
+    if ([property isEqualToString:@"text-field"]) {
+      symbolLayer.text = [MLNStyleValue valueWithRawValue:value];
+    } else if ([property isEqualToString:@"text-size"]) {
+      symbolLayer.textFontSize = [MLNStyleValue valueWithRawValue:value];
+    } else if ([property isEqualToString:@"text-anchor"]) {
+      symbolLayer.textAnchor = [MLNStyleValue valueWithRawValue:value];
+    } else if ([property isEqualToString:@"text-offset"]) {
+      symbolLayer.textOffset = [MLNStyleValue valueWithRawValue:value];
+    } else if ([property isEqualToString:@"icon-image"]) {
+      symbolLayer.iconImageName = [MLNStyleValue valueWithRawValue:value];
+    } else if ([property isEqualToString:@"icon-size"]) {
+      symbolLayer.iconScale = [MLNStyleValue valueWithRawValue:value];
+    } else if ([property isEqualToString:@"icon-anchor"]) {
+      symbolLayer.iconAnchor = [MLNStyleValue valueWithRawValue:value];
+    } else if ([property isEqualToString:@"icon-offset"]) {
+      symbolLayer.iconOffset = [MLNStyleValue valueWithRawValue:value];
+    }
+  } else if ([layer isKindOfClass:[MLNFillStyleLayer class]]) {
+    MLNFillStyleLayer *fillLayer = (MLNFillStyleLayer *)layer;
+    if ([property isEqualToString:@"fill-sort-key"]) {
+      fillLayer.fillSortKey = [MLNStyleValue valueWithRawValue:value];
+    }
+  } else if ([layer isKindOfClass:[MLNCircleStyleLayer class]]) {
+    MLNCircleStyleLayer *circleLayer = (MLNCircleStyleLayer *)layer;
+    if ([property isEqualToString:@"circle-sort-key"]) {
+      circleLayer.circleSortKey = [MLNStyleValue valueWithRawValue:value];
+    }
+  } else {
+    NSLog(@"Unsupported layout property '%@' for layer type '%@'", property, NSStringFromClass([layer class]));
+  }
+}
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
 - (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {

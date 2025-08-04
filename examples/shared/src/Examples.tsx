@@ -80,6 +80,14 @@ const Examples = new ExampleGroup(
       ),
       new ExampleItem("Change Layer Color", MapLibreExamples.ChangeLayerColor),
       new ExampleItem(
+        "Layers Visibility",
+        MapLibreExamples.LayersVisibility,
+      ),
+      new ExampleItem(
+        "Layout Property",
+        MapLibreExamples.LayoutProperty,
+      ),
+      new ExampleItem(
         "Source Layer Visibility",
         MapLibreExamples.SourceLayerVisibility,
       ),

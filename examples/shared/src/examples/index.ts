@@ -42,6 +42,8 @@ export { GradientLine } from "./LineLayer/GradientLine";
 // Map
 export { ChangeLayerColor } from "./Map/ChangeLayerColor";
 export { CreateOfflineRegion } from "./Map/CreateOfflineRegion";
+export { LayersVisibility } from "./Map/LayersVisibility";
+export { LayoutProperty } from "./Map/LayoutProperty";
 export { PointInMapView } from "./Map/PointInMapView";
 export { ShowAndHideLayer } from "./Map/ShowAndHideLayer";
 export { ShowClick } from "./Map/ShowClick";

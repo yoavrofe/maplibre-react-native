@@ -85,6 +85,13 @@ typedef void (^StyleLoadedBlock)(MLNStyle *__nonnull style);
                    sourceId:(nonnull NSString *)sourceId
               sourceLayerId:(nullable NSString *)sourceLayerId;
 
+- (void)setLayersVisibility:(BOOL)visible
+                  layerIds:(nonnull NSArray<NSString *> *)layerIds;
+
+- (void)setLayoutProperty:(nonnull NSString *)layerId
+                 property:(nonnull NSString *)property
+                    value:(nonnull id)value;
+
 - (void)notifyStyleLoaded;
 
 @end

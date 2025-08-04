@@ -1061,6 +1061,51 @@ public class MLRNMapView extends MapView implements OnMapReadyCallback, MapLibre
         });
     }
 
+    public void setLayersVisibility(final boolean visible, @NonNull final String[] layerIds) {
+        if (mMap == null) {
+            return;
+        }
+        mMap.getStyle(new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+                for (String layerId : layerIds) {
+                    Layer layer = style.getLayer(layerId);
+                    if (layer != null) {
+                        layer.setProperties(visibility(visible ? Property.VISIBLE : Property.NONE));
+                    }
+                }
+            }
+        });
+    }
+
+    public void setLayoutProperty(final String layerId, final String property, final Object value) {
+        if (mMap == null) {
+            return;
+        }
+        mMap.getStyle(new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+                Layer layer = style.getLayer(layerId);
+                if (layer != null) {
+                    try {
+                        switch (property) {
+                            case "visibility":
+                                layer.setProperties(visibility((Boolean) value ? Property.VISIBLE : Property.NONE));
+                                break;
+                            default:
+                                Logger.w(LOG_TAG, String.format("Unsupported layout property: %s", property));
+                                break;
+                        }
+                    } catch (Exception e) {
+                        Logger.e(LOG_TAG, String.format("Error setting layout property %s: %s", property, e.getMessage()));
+                    }
+                } else {
+                    Logger.w(LOG_TAG, String.format("Layer with ID '%s' not found", layerId));
+                }
+            }
+        });
+    }
+
     public void init() {
         // Required for rendering properly in Android Oreo
         getViewTreeObserver().dispatchOnGlobalLayout();

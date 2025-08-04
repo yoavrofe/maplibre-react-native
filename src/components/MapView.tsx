@@ -262,6 +262,15 @@ export interface MapViewRef {
     sourceId: string,
     sourceLayerId?: string | null,
   ) => void;
+  setLayersVisibility: (
+    visible: boolean,
+    layerIds: string[],
+  ) => void;
+  setLayoutProperty: (
+    layerId: string,
+    property: string,
+    value: NativeArg,
+  ) => void;
   showAttribution: () => Promise<void>;
   setNativeProps: (props: NativeProps) => void;
 }
@@ -379,6 +388,28 @@ export const MapView = memo(
            * @param {string=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')
            */
           setSourceVisibility,
+          /**
+           * Sets the visibility of specific layers by their layer IDs
+           *
+           * @example
+           * this._map.setLayersVisibility(false, ['layer1', 'layer2', 'layer3'])
+           *
+           * @param {boolean} visible - Visibility of the layers
+           * @param {string[]} layerIds - Array of layer IDs to modify
+           */
+          setLayersVisibility,
+          /**
+           * Sets a layout property for a specific layer
+           *
+           * @example
+           * this._map.setLayoutProperty('myLayer', 'visibility', 'none')
+           * this._map.setLayoutProperty('myLayer', 'text-size', 16)
+           *
+           * @param {string} layerId - ID of the target layer
+           * @param {string} property - The layout property to set
+           * @param {string | number | boolean | object} value - The value to set
+           */
+          setLayoutProperty,
           /**
            * Show the attribution and telemetry action sheet.
            * If you implement a custom attribution button, you should add this action to the button.
@@ -587,6 +618,28 @@ export const MapView = memo(
           visible,
           sourceId,
           sourceLayerId,
+        ]);
+      };
+
+      const setLayersVisibility = (
+        visible: boolean,
+        layerIds: string[],
+      ): void => {
+        _runNativeCommand("setLayersVisibility", _nativeRef.current, [
+          visible,
+          layerIds,
+        ]);
+      };
+
+      const setLayoutProperty = (
+        layerId: string,
+        property: string,
+        value: NativeArg,
+      ): void => {
+        _runNativeCommand("setLayoutProperty", _nativeRef.current, [
+          layerId,
+          property,
+          value,
         ]);
       };
 

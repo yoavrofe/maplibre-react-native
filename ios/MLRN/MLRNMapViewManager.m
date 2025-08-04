@@ -310,6 +310,41 @@ RCT_EXPORT_METHOD(setSourceVisibility : (nonnull NSNumber *)reactTag visible : (
   }];
 }
 
+RCT_EXPORT_METHOD(setLayersVisibility : (nonnull NSNumber *)reactTag visible : (
+    BOOL)visible layerIds : (nonnull NSArray<NSString *> *)layerIds resolver : (RCTPromiseResolveBlock)
+                      resolve rejecter : (RCTPromiseRejectBlock)reject) {
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager,
+                                      NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+
+    if (![view isKindOfClass:[MLRNMapView class]]) {
+      RCTLogError(@"Invalid react tag, could not find MLRNMapView");
+      return;
+    }
+
+    __weak MLRNMapView *reactMapView = (MLRNMapView *)view;
+    [reactMapView setLayersVisibility:visible layerIds:layerIds];
+    resolve(nil);
+  }];
+}
+
+RCT_EXPORT_METHOD(setLayoutProperty : (nonnull NSNumber *)reactTag layerId : (nonnull NSString *)layerId property : (nonnull NSString *)property value : (nonnull id)value resolver : (RCTPromiseResolveBlock)
+                      resolve rejecter : (RCTPromiseRejectBlock)reject) {
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager,
+                                      NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+
+    if (![view isKindOfClass:[MLRNMapView class]]) {
+      RCTLogError(@"Invalid react tag, could not find MLRNMapView");
+      return;
+    }
+
+    __weak MLRNMapView *reactMapView = (MLRNMapView *)view;
+    [reactMapView setLayoutProperty:layerId property:property value:value];
+    resolve(nil);
+  }];
+}
+
 #pragma mark - UIGestureRecognizers
 
 - (void)didTapMap:(UITapGestureRecognizer *)recognizer {

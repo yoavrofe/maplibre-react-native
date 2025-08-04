@@ -214,6 +214,8 @@ public class MLRNMapViewManager extends AbstractEventEmitter<MLRNMapView> {
     public static final int METHOD_SET_HANDLED_MAP_EVENTS = 10;
     public static final int METHOD_SHOW_ATTRIBUTION = 11;
     public static final int METHOD_SET_SOURCE_VISIBILITY = 12;
+    public static final int METHOD_SET_LAYER_VISIBILITY = 13;
+    public static final int METHOD_SET_LAYOUT_PROPERTY = 14;
 
     @Nullable
     @Override
@@ -230,6 +232,8 @@ public class MLRNMapViewManager extends AbstractEventEmitter<MLRNMapView> {
                 .put( "setHandledMapChangedEvents", METHOD_SET_HANDLED_MAP_EVENTS)
                 .put("showAttribution", METHOD_SHOW_ATTRIBUTION)
                 .put("setSourceVisibility", METHOD_SET_SOURCE_VISIBILITY)
+                .put("setLayersVisibility", METHOD_SET_LAYER_VISIBILITY)
+                .put("setLayoutProperty", METHOD_SET_LAYOUT_PROPERTY)
                 .build();
     }
 
@@ -293,7 +297,25 @@ public class MLRNMapViewManager extends AbstractEventEmitter<MLRNMapView> {
                         args.getString(2),
                         args.getString(3)
                 );
-
+                break;
+            case METHOD_SET_LAYER_VISIBILITY:
+                ReadableArray layerIdsArray = args.getArray(2);
+                String[] layerIds = new String[layerIdsArray.size()];
+                for (int i = 0; i < layerIdsArray.size(); i++) {
+                    layerIds[i] = layerIdsArray.getString(i);
+                }
+                mapView.setLayersVisibility(
+                        args.getBoolean(1),
+                        layerIds
+                );
+                break;
+            case METHOD_SET_LAYOUT_PROPERTY:
+                mapView.setLayoutProperty(
+                        args.getString(1), // layerId
+                        args.getString(2), // property
+                        args.getDynamic(3).getValue() // value
+                );
+                break;
         }
     }
 
@@ -339,4 +361,3 @@ public class MLRNMapViewManager extends AbstractEventEmitter<MLRNMapView> {
         }
     }
 }
-
