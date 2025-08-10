@@ -313,7 +313,7 @@ public class MLRNMapViewManager extends AbstractEventEmitter<MLRNMapView> {
                 mapView.setLayoutProperty(
                         args.getString(1), // layerId
                         args.getString(2), // property
-                        args.getDynamic(3).getValue() // value
+                        args.getDynamic(3) // value
                 );
                 break;
         }

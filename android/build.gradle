@@ -117,7 +117,10 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
   // MapLibre Native
-  implementation "org.maplibre.gl:android-sdk-${getConfigurableExtOrDefault('nativeVariant')}:${getConfigurableExtOrDefault('nativeVersion')}"
+  // implementation "org.maplibre.gl:android-sdk-${getConfigurableExtOrDefault('nativeVariant')}:${getConfigurableExtOrDefault('nativeVersion')}"
+  implementation files('libs/MapLibreAndroid-opengl-release.aar')
+  // Android gestures library required for MapLibre gesture classes
+  implementation 'org.maplibre.gl:maplibre-android-gestures:0.0.4'
 
   // MapLibre Plugins
   implementation("org.maplibre.gl:android-plugin-localization-v9:${getConfigurableExtOrDefault('pluginVersion')}") {

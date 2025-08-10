@@ -27,7 +27,7 @@ import { useOnce } from "../hooks/useOnce";
 import { type Location } from "../modules/location/LocationManager";
 import { type BaseProps } from "../types/BaseProps";
 import { type FilterExpression } from "../types/MapLibreRNStyles";
-import { isFunction, isAndroid } from "../utils";
+import { isFunction, isAndroid, type NativeArg } from "../utils";
 import { Logger } from "../utils/Logger";
 import { getFilter } from "../utils/filterUtils";
 
